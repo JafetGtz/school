@@ -1,0 +1,119 @@
+//
+// Split a string by delimiter
+//
+
+@function str-explode($string, $delimiter: ".") {
+    @if type-of($string) != "string" {
+        @error 'The argument $string: `#{$string}` is of incorrect type: `#{type-of($string)}`. Type of `String` is required!';
+    } @else if type-of($delimiter) != "string" {
+        @error 'The argument $string: `#{$string}` is of incorrect type: `#{type-of($string)}`. Type of `String` is required!';
+    }
+    $result: ();
+    $running: true;
+
+    @if str-length($delimiter) == 0 {
+        @for $i from 1 through str-length($string) {
+            $result: append($result, str-slice($string, $i, $i));
+        }
+
+        @return $result;
+    }
+
+    @while $running {
+        $index: str-index($string, $delimiter);
+
+        @if $index != null {
+            $item: str-slice($string, 1, ($index - 1));
+            $result: append($result, $item);
+            $string: str-slice($string, ($index + str-length($delimiter)));
+        } @else {
+            $running: false;
+        }
+    }
+
+    @return append($result, $string);
+}
+
+//
+// Check if nested map has a value by the keys
+//
+@function deep-map-check($map, $keys...) {
+    @if type-of($map) != "map" {
+        @error 'The argument $map: `#{$map}` is of incorrect type: `#{type-of($map)}`. Type of `Map` is required!';
+    }
+
+    @each $key in $keys {
+        @if not map-has-key($map, $key) {
+            @return false;
+        }
+        $map: map-get($map, $key);
+    }
+
+    @return true;
+}
+
+//
+// Get a value from nested map by the keys
+//
+@function deep-map-get($map, $keys...) {
+    @if type-of($map) != "map" {
+        @error 'The argument $map: `#{$map}` is of incorrect type: `#{type-of($map)}`. Type of `Map` is required!';
+    }
+
+    @each $key in $keys {
+        $map: map-get($map, $key);
+    }
+
+    @return $map;
+}
+
+//
+// Search for any value contained within nested maps, by using
+// dot notation as the key argument
+//
+@function get($key, $map) {
+    $keys: str-explode($key, ".");
+
+    @if not deep-map-check($map, $keys...) {
+        @error 'The argument $map: `#{$map}` doesn\'t has some of the $keys: `#{$keys}`!';
+    }
+
+    @return deep-map-get($map, $keys...);
+}
+
+//
+// Sligtly ligthen a color
+//
+@function tint($color, $percentage) {
+    @return mix(white, $color, $percentage);
+}
+
+//
+/// Sligtly darken a color
+//
+@function shade($color, $percentage) {
+    @return mix(black, $color, $percentage);
+}
+
+//
+// The yiq lightness value that determines when the
+// lightness of color changes from "dark" to "light".
+// Acceptable values are between 0 and 255.
+//
+$yiq-threshold: 180;
+$yiq-dark: #000;
+$yiq-light: #fff;
+
+@function yiq($color) {
+    $r: red($color);
+    $g: green($color);
+    $b: blue($color);
+
+    $yiq: (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
+
+    @if ($yiq >= $yiq-threshold) {
+        @return $yiq-dark;
+    } @else {
+        @return $yiq-light;
+    }
+}

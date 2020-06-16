@@ -1,0 +1,141 @@
+@mixin elevation($z) {
+    $z: $z + 1;
+    box-shadow: nth($shadow-key-umbra, $z), nth($shadow-key-penumbra, $z),
+        nth($shadow-key-ambient, $z);
+}
+
+//
+// Mixin to manage responsive breakpoints
+//
+@mixin breakpoint($point) {
+    @if map-has-key($breakpoints, $point) {
+        @media (min-width: map-get($breakpoints, $point)) {
+            @content;
+        }
+    } @else {
+        @error "Unfortunately, no value could be retrieved from `#{$point}`. "
+          + "Available breakpoints are: #{map-keys($breakpoints)}.";
+    }
+}
+
+//
+// Absolute center the element
+//
+@mixin centered($position: "both") {
+    position: absolute;
+
+    @if $position == "vertical" {
+        top: 50%;
+        transform: translateY(-50%);
+    } @else if $position == "horizontal" {
+        left: 50%;
+        transform: translateX(-50%);
+    } @else if $position == "both" {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+//
+// Centers child elements using flexbox
+//
+@mixin child-centered() {
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+    position: relative;
+    vertical-align: middle;
+}
+
+//
+// Complety hide a element but still visible by screen readers
+//
+@mixin hide-visually {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    z-index: -1;
+}
+
+//
+// Element sizing shorthands
+//
+@mixin size($width, $height: $width) {
+    width: $width;
+    height: $height;
+}
+
+@mixin min-size($width, $height: $width) {
+    min-width: $width;
+    min-height: $height;
+}
+
+@mixin max-size($width, $height: $width) {
+    max-width: $width;
+    max-height: $height;
+}
+
+//
+// Padding shorthand mixin
+//
+@mixin padding($top: false, $right: false, $bottom: false, $left: false) {
+    @if ($top) { padding-top: $top }
+    @if ($right) { padding-right: $right }
+    @if ($bottom) { padding-bottom: $bottom }
+    @if ($left) { padding-left: $left }
+}
+
+//
+// Margin shorthand mixin
+//
+@mixin margin($top: false, $right: false, $bottom: false, $left: false) {
+    @if ($top) { margin-top: $top }
+    @if ($right) { margin-right: $right }
+    @if ($bottom) { margin-bottom: $bottom }
+    @if ($left) { margin-left: $left }
+}
+
+@mixin clearfix {
+    &::after {
+        clear: both;
+        content: "";
+        display: block;
+    }
+}
+
+//
+// Position
+//
+@mixin position(
+    $position,
+    $top: false,
+    $left: false,
+    $bottom: false,
+    $right: false
+) {
+    position: $position;
+
+    @if ($top) { top: $top }
+    @if ($left) { left: $left }
+    @if ($bottom) { bottom: $bottom }
+    @if ($right) { right: $right }
+}
+
+//
+// Ellipsis
+//
+@mixin ellipsis {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+//
+// Pseudo
+//
+@mixin pseudo($position: absolute, $display: block, $content: "") {
+    content: $content;
+    position: $position;
+    display: $display;
+}

@@ -1,0 +1,168 @@
+@import 'vendor/reset';
+@import 'vendor/normalize';
+@import 'vendor/flexboxgrid';
+@import 'vendor/icons';
+
+@import 'globals';
+@import 'helpers';
+
+*,
+*::before,
+*::after {
+    border: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+html { font-size: 16px }
+
+body {
+    font-family: $font-family-sans-serif;
+    font-size: get('medium', $font-sizes);
+    font-weight: get('regular', $font-weights);
+    color: $font-color;
+    line-height: 1.5;
+    word-spacing: 1px;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+button {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: get('bold', $font-weights);
+    color: color('black', 400);
+    margin-top: 0;
+    margin-bottom: get('two', $spacers);
+}
+
+h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    letter-spacing: -1px;
+}
+
+h2 {
+    font-size: 2rem;
+    line-height: 1.25;
+    letter-spacing: -1px;
+}
+
+h3 {
+    font-size: 1.7rem;
+    line-height: 1.3;
+    letter-spacing: -1px;
+}
+
+h4 {
+    font-size: 1.5rem;
+    line-height: 1.35;
+    letter-spacing: -0.8px;
+}
+
+h5 {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    letter-spacing: -0.5px;
+}
+
+h6 {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    letter-spacing: 0;
+}
+
+/* ---------------------------------- Grid ---------------------------------- */
+
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1rem;
+
+    @include breakpoint('md') {
+        width: 85%;
+        padding: 0;
+    }
+}
+
+/* ---------------------------------- Link ---------------------------------- */
+
+.link {
+    text-decoration: none;
+    color: color('primary');
+    font-weight: get('bold', $font-weights);
+
+    &:hover { color: color('primary', 700) }
+}
+
+/* ------------------------------ Image Wrapper ----------------------------- */
+.image {
+    position: relative;
+    overflow: hidden;
+
+    > img {
+        @include centered;
+        height: 100%;
+        width: auto;
+    }
+}
+
+/* ---------------------------------- Error --------------------------------- */
+.info,
+.success,
+.error {
+    display: block;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    border: 1px solid color('black');
+    border-radius: 5px;
+
+    &::before {
+        font-size: get('large', $font-sizes);
+        margin-right: 0.75rem;
+
+    }
+}
+
+.info {
+    @extend .icon;
+    @extend .icon-info;
+
+    color: color('blue');
+    border-color: color('blue');
+}
+
+.success {
+    @extend .icon;
+    @extend .icon-ok;
+
+    color: color('green');
+    border-color: color('green');
+}
+
+.error {
+    @extend .icon;
+    @extend .icon-alert;
+
+    color: color('red');
+    border-color: color('red');
+}
